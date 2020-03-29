@@ -16,7 +16,7 @@ if (annyang) {
 function getProduct(tag) {
     //numberText_id = 1;
     let id;
-    if (typeof parseInt(tag) != "NaN") id = parseInt(tag) //numberToText(parseInt(tag))
+    if (!isNaN(parseInt(tag))) id = parseInt(tag) //numberToText(parseInt(tag))
     else id = textToNumber(tag)
 
     $.get(`https://snapstore.devinnovaperu.com/api/store_product/${id}/get`, function(data) {
@@ -28,35 +28,71 @@ function getProduct(tag) {
             '</ul>');
     });
 }
-let num;
-let arr = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce",
-    "quince", "veinte", "treinta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa", "cien", "docientos", "trecientos", "cuatrocientos",
-    "quinientos", "seicientos", "setecientos", "ochocientos", "novecientos", "mil"
-]
-let arrtxt = ["dieci", "veinti", "treintai", "cuarentai", "cincuentai", "sesentai", "setentai", "ochentai", "noventai", "ciento"]
+
+let otxt = ["dieci", "mil", "cien"]
+let arr2 = ["diez", "veinte", "treinta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa", "cien"]
+let b = ["ciento", "docientos", "trecientos", "cuatrocientos", "quinientos", "seicientos", "setecientos", "ochocientos", "novecientos"]
+let c = ["veinti", "treintay", "cuarentay", "cincuentay", "sesentay", "setentay", "ochentay", "noventay"]
+let d = ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"]
+let a = ["once", "doce", "trece", "catorce", "quince", otxt[0].concat(d[6]), otxt[0].concat(d[7]), otxt[0].concat(d[8]), otxt[0].concat(d[9])]
+
+let ac = []
+ac = d.concat(arr2.concat(a))
+ac = addS()
+    //console.log(ac)
+let m = []
+m = addM(otxt[1]);
+//console.log(m)
+let ma = []
+m.map(x => {
+    ac.map(y => {
+        ma.push(x + y)
+    })
+});
+console.log(ma)
 
 function textToNumber(number) { //docientos //cientouno
+    return ma.find(val => (val === number));
+}
+//console.log(textToNumber(("mil sesenta y siete").replace(/ /g, "")));
+//var t=("mil sesenta y siete").replace(/ /g, "");
+//console.log(textToNumber(t))
+function addM(txt) {
+    let data = [];
+    d.map((r, index) => {
+        if (index == 0) data.push(txt)
+        else data.push(r + txt)
+    });
+    arr2.map(r => {
+        data.push(r + txt)
+    });
+    b.map(re => {
+        arr2.map(r => {
+            data.push(re + r + txt)
+        });
+    });
+    return data;
+}
 
-    for (let index = 0; index < 16; index++)
-        if (number == arr[(index + 1)]) num = (index + 1)
+function addS() {
+    let data = [];
 
-    for (let index = 0; index < 4; index++)
-        if (number == arrtxt[0].concat(arr[(index + 6)])) num = (16 + index)
-
-    for (let i = 0; i < 8; i++)
-        for (let j = 0; j < 9; j++)
-            if (number == arrtxt[(i + 1)].concat(arr[j + 1])) num = parseInt(((i + 2).toString()).concat((j + 1).toString()))
-
-    for (let index = 0; index < 8; index++)
-        if (number == arr[(index + 16)]) num = ((index + 2) * 10)
-
-        //cientouno
-
-
-
-        /*for (let i = 0; i < 8; i++) //24
-            for (let j = 0; j < 9; j++)
-            if (number == arrtxt[(i + 1)].concat(arr[j + 1])) num = parseInt(((i + 2).toString()).concat((j + 1).toString()))*/
-
-    return num;
+    c.map(x => {
+        d.map(y => {
+            data.push(x + y)
+        })
+    });
+    b.map(v => {
+        a.map(z => {
+            data.push(v + z)
+        });
+    })
+    b.map(v => {
+        c.map(z => {
+            d.map(y => {
+                data.push(v + z + y)
+            })
+        });
+    });
+    return data;
 }
